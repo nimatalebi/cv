@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مجازی‌سازی سرور با VMware ESXi؛ کاهش هزینه‌ی سخت‌افزار در سازمان‌های کوچک — نیما طالبی</title>
+<meta name="description" content="مجازی‌سازی سرور با VMware ESXi چیست و چطور هزینه‌ی سخت‌افزار، برق و نگهداری را کم می‌کند. طراحی منابع، پشتیبان‌گیری، امنیت و اشتباهات رایج در سازمان‌های کوچک.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://nimatalebi.ir/blog/esxi-server-virtualization/">
+<meta name="theme-color" content="#0c0c0b">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:url" content="https://nimatalebi.ir/blog/esxi-server-virtualization/">
+<meta property="og:title" content="مجازی‌سازی سرور با VMware ESXi؛ کاهش هزینه‌ی سخت‌افزار در سازمان‌های کوچک">
+<meta property="og:description" content="مجازی‌سازی سرور با VMware ESXi چیست و چطور هزینه‌ی سخت‌افزار، برق و نگهداری را کم می‌کند. طراحی منابع، پشتیبان‌گیری، امنیت و اشتباهات رایج در سازمان‌های کوچک.">
+<meta property="og:image" content="https://nimatalebi.ir/assets/img/avatar.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-11-15">
+<link rel="icon" href="/assets/img/favicon.ico">
+<link rel="preload" href="/assets/fonts/vazirmatn-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "مجازی‌سازی سرور با VMware ESXi؛ کاهش هزینه‌ی سخت‌افزار در سازمان‌های کوچک",
+ "description": "مجازی‌سازی سرور با VMware ESXi چیست و چطور هزینه‌ی سخت‌افزار، برق و نگهداری را کم می‌کند. طراحی منابع، پشتیبان‌گیری، امنیت و اشتباهات رایج در سازمان‌های کوچک.",
+ "datePublished": "2026-11-15",
+ "dateModified": "2026-11-15",
+ "inLanguage": "fa",
+ "mainEntityOfPage": "https://nimatalebi.ir/blog/esxi-server-virtualization/",
+ "image": "https://nimatalebi.ir/assets/img/avatar.png",
+ "keywords": "مجازی سازی سرور",
+ "author": {
+  "@type": "Person",
+  "name": "نیما طالبی",
+  "url": "https://nimatalebi.ir/"
+ }
+}
+</script>
+</head>
+<body>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="/"><i aria-hidden="true"></i>نیما طالبی</a>
+    <nav class="nav" aria-label="ناوبری اصلی">
+      <a href="/#about">درباره من</a>
+      <a href="/#work">تخصص‌ها</a>
+      <a href="/#experience">تجربه</a>
+      <a href="/blog/" class="cur">نوشته‌ها</a>
+      <a href="/#contact">تماس</a>
+    </nav>
+    <div class="clock mono ltr"><span class="dot" aria-hidden="true"></span><span>TEHRAN</span><b id="clock">--:--</b></div>
+  </div>
+</header>
+
+<main>
+<article>
+  <header class="art-head">
+    <div class="wrap">
+      <nav class="crumbs mono" aria-label="مسیر"><a href="/">خانه</a><span aria-hidden="true">/</span><a href="/blog/">نوشته‌ها</a><span aria-hidden="true">/</span><span>esxi-server-virtualization</span></nav>
+      <h1>مجازی‌سازی سرور با VMware ESXi؛ کاهش هزینه‌ی سخت‌افزار در سازمان‌های کوچک</h1>
+      <p class="lede">در خیلی از سازمان‌ها برای هر سرویس یک سرور فیزیکی خریده شده: یکی برای حسابداری، یکی برای فایل، یکی برای وب‌سایت داخلی. بیشتر این سرورها اغلب وقت بیکارند. مجازی‌سازی همه‌ی این‌ها را روی سخت‌افزار کمتر، با مدیریت ساده‌تر جمع می‌کند.</p>
+      <div class="art-meta mono">
+        <span>تاریخ <b>۲۴ آبان ۱۴۰۵</b></span>
+        <span>زمان مطالعه <b>۲ دقیقه</b></span>
+        <span>موضوع <b>شبکه و زیرساخت</b></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="art-body">
+    <div class="wrap">
+      <aside class="toc" aria-label="فهرست مطالب">
+        <h2>CONTENTS</h2>
+        <ol id="toc"></ol>
+      </aside>
+
+      <div class="prose">
+<h2 id="what">مجازی‌سازی سرور یعنی چه؟</h2>
+<p>در مجازی‌سازی، یک سرور فیزیکی قدرتمند به چند <strong>ماشین مجازی</strong> تقسیم می‌شود. هر ماشین مجازی سیستم‌عامل و سرویس‌های خودش را دارد و از دید کاربر دقیقاً مثل یک سرور مستقل است. VMware ESXi یکی از پرکاربردترین هایپروایزرهاست که مستقیم روی سخت‌افزار نصب می‌شود و این تقسیم‌بندی را مدیریت می‌کند.</p>
+
+<h2 id="benefits">چه چیزی به دست می‌آید؟</h2>
+<ul>
+ <li><strong>هزینه‌ی کمتر:</strong> سخت‌افزار، برق، خنک‌کننده و فضای رک کمتر</li>
+ <li><strong>راه‌اندازی سریع:</strong> سرور جدید در چند دقیقه ساخته می‌شود، نه با خرید و نصب سخت‌افزار</li>
+ <li><strong>Snapshot:</strong> قبل از به‌روزرسانی یا تغییر پرریسک، از وضعیت سرور عکس بگیرید و در صورت مشکل در چند ثانیه برگردید.</li>
+ <li><strong>جداسازی:</strong> مشکل یک سرویس، بقیه‌ی سرویس‌ها را از کار نمی‌اندازد.</li>
+ <li><strong>محیط تست:</strong> ساخت نسخه‌ی آزمایشی از سرور واقعی بدون هزینه‌ی اضافه</li>
+</ul>
+
+<h2 id="sizing">طراحی منابع</h2>
+<p>اشتباه رایج، خرید سرور بر اساس «هرچه قوی‌تر، بهتر» یا برعکس، تقسیم بیش از حد منابع است. چند قاعده‌ی عملی:</p>
+<ul>
+ <li><strong>حافظه (RAM):</strong> معمولاً اولین منبعی است که تمام می‌شود. مجموع نیاز ماشین‌ها به‌اضافه‌ی حاشیه‌ی رشد را در نظر بگیرید.</li>
+ <li><strong>دیسک:</strong> سرعت دیسک برای دیتابیس‌ها حیاتی است. دیسک‌های SSD برای ماشین‌های پرکار، و RAID برای تحمل خرابی دیسک.</li>
+ <li><strong>پردازنده:</strong> تخصیص هسته‌ی مجازی بیشتر از نیاز، لزوماً سرعت را بالا نمی‌برد و گاهی کمش هم می‌کند.</li>
+ <li><strong>شبکه:</strong> تفکیک ترافیک مدیریت، ذخیره‌سازی و سرویس‌ها؛ هم‌راستا با <a href="/blog/mikrotik-network-setup/">VLANهای شبکه‌ی سازمان</a>.</li>
+</ul>
+
+<h2 id="backup">پشتیبان‌گیری؛ Snapshot پشتیبان نیست</h2>
+<p>Snapshot برای برگشت کوتاه‌مدت عالی است، اما جایگزین پشتیبان‌گیری نیست؛ چون روی همان دیسک ذخیره می‌شود و اگر سرور از بین برود، با آن از بین می‌رود. یک استراتژی پشتیبان درست شامل این‌هاست:</p>
+<ol>
+ <li>پشتیبان منظم از کل ماشین‌های مجازی روی یک مقصد جدا</li>
+ <li>حداقل یک نسخه خارج از محل اصلی</li>
+ <li><strong>آزمایش بازیابی</strong>؛ پشتیبانی که هرگز بازیابی‌اش امتحان نشده، فقط یک امید است.</li>
+</ol>
+
+<h2 id="security">امنیت</h2>
+<ul>
+ <li>رابط مدیریت ESXi فقط از شبکه‌ی مدیریتی در دسترس باشد، نه از شبکه‌ی کاربران یا اینترنت.</li>
+ <li>به‌روزرسانی منظم هایپروایزر؛ آسیب‌پذیری‌های آن مستقیماً همه‌ی سرورها را تهدید می‌کند.</li>
+ <li>حساب کاربری جدا برای هر مدیر و ثبت فعالیت‌ها</li>
+</ul>
+
+<h2 id="small">آیا برای سازمان کوچک هم ارزش دارد؟</h2>
+<p>اگر بیش از دو یا سه سرویس داخلی دارید (حسابداری، فایل، اتوماسیون اداری، وب‌سایت داخلی، دوربین)، تقریباً همیشه بله. حتی یک سرور فیزیکی خوب با مجازی‌سازی، از چند سرور قدیمی و پراکنده قابل‌اعتمادتر و ارزان‌تر است. این زیرساخت همچنین جای مناسبی برای اجرای <a href="/blog/enterprise-ai-solutions/">مدل‌های هوش مصنوعی داخل سازمان</a> است، بدون ارسال داده به بیرون.</p>
+<p>برای طراحی زیرساخت سرورهای سازمان‌تان، از <a href="/#contact">بخش تماس</a> پیام بدهید.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<section class="sec related">
+  <div class="wrap">
+    <div class="sec-head"><span class="idx mono">→</span><h2>نوشته‌های مرتبط</h2></div>
+      <a class="post" href="/blog/mikrotik-network-setup/"><span class="d">شبکه و زیرساخت</span><h3>راه‌اندازی شبکه‌ی شرکت با میکروتیک؛ از طراحی تا امنیت</h3><span class="go">←</span></a>
+      <a class="post" href="/blog/smart-business/"><span class="d">اتوماسیون</span><h3>هوشمندسازی کسب‌وکار چیست و از کجا شروع کنیم؟ راهنمای عملی برای مدیران</h3><span class="go">←</span></a>
+      <a class="post" href="/blog/enterprise-ai-solutions/"><span class="d">هوش مصنوعی</span><h3>راهکارهای هوش مصنوعی برای سازمان‌ها؛ کجا جواب می‌دهد و کجا نه</h3><span class="go">←</span></a>
+  </div>
+</section>
+
+<nav class="art-foot" aria-label="ناوبری مقاله">
+  <div class="wrap">
+    <a href="/blog/seo-in-ai-era/"><small>NEXT</small><b>سئو در عصر هوش مصنوعی؛ چطور در پاسخ‌های ChatGPT و گوگل دیده شویم</b></a>
+    <a href="/blog/production-management-software/"><small>PREVIOUS</small><b>نرم‌افزار مدیریت تولید؛ از برنامه‌ریزی تا کنترل کارگاه</b></a>
+  </div>
+</nav>
+</main>
+
+<footer>
+  <div class="wrap mono ltr"><span>© <span id="yr">2026</span> NIMA TALEBI</span><a href="/blog/">← BLOG</a></div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

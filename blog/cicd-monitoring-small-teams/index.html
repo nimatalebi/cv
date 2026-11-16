@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD و مانیتورینگ در تیم‌های کوچک؛ تجربه‌ی سرپرستی تیم فنی — نیما طالبی</title>
+<meta name="description" content="تجربه‌ی راه‌اندازی CI/CD، کد ریویو و مانیتورینگ در یک تیم نرم‌افزاری کوچک: از استقرار دستی و پرریسک تا تحویل خودکار، قابل‌اعتماد و قابل ردیابی.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://nimatalebi.ir/blog/cicd-monitoring-small-teams/">
+<meta name="theme-color" content="#0c0c0b">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:url" content="https://nimatalebi.ir/blog/cicd-monitoring-small-teams/">
+<meta property="og:title" content="CI/CD و مانیتورینگ در تیم‌های کوچک؛ تجربه‌ی سرپرستی تیم فنی">
+<meta property="og:description" content="تجربه‌ی راه‌اندازی CI/CD، کد ریویو و مانیتورینگ در یک تیم نرم‌افزاری کوچک: از استقرار دستی و پرریسک تا تحویل خودکار، قابل‌اعتماد و قابل ردیابی.">
+<meta property="og:image" content="https://nimatalebi.ir/assets/img/avatar.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-11-15">
+<link rel="icon" href="/assets/img/favicon.ico">
+<link rel="preload" href="/assets/fonts/vazirmatn-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "CI/CD و مانیتورینگ در تیم‌های کوچک؛ تجربه‌ی سرپرستی تیم فنی",
+ "description": "تجربه‌ی راه‌اندازی CI/CD، کد ریویو و مانیتورینگ در یک تیم نرم‌افزاری کوچک: از استقرار دستی و پرریسک تا تحویل خودکار، قابل‌اعتماد و قابل ردیابی.",
+ "datePublished": "2026-11-15",
+ "dateModified": "2026-11-15",
+ "inLanguage": "fa",
+ "mainEntityOfPage": "https://nimatalebi.ir/blog/cicd-monitoring-small-teams/",
+ "image": "https://nimatalebi.ir/assets/img/avatar.png",
+ "keywords": "CI/CD در تیم نرم افزاری",
+ "author": {
+  "@type": "Person",
+  "name": "نیما طالبی",
+  "url": "https://nimatalebi.ir/"
+ }
+}
+</script>
+</head>
+<body>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="/"><i aria-hidden="true"></i>نیما طالبی</a>
+    <nav class="nav" aria-label="ناوبری اصلی">
+      <a href="/#about">درباره من</a>
+      <a href="/#work">تخصص‌ها</a>
+      <a href="/#experience">تجربه</a>
+      <a href="/blog/" class="cur">نوشته‌ها</a>
+      <a href="/#contact">تماس</a>
+    </nav>
+    <div class="clock mono ltr"><span class="dot" aria-hidden="true"></span><span>TEHRAN</span><b id="clock">--:--</b></div>
+  </div>
+</header>
+
+<main>
+<article>
+  <header class="art-head">
+    <div class="wrap">
+      <nav class="crumbs mono" aria-label="مسیر"><a href="/">خانه</a><span aria-hidden="true">/</span><a href="/blog/">نوشته‌ها</a><span aria-hidden="true">/</span><span>cicd-monitoring-small-teams</span></nav>
+      <h1>CI/CD و مانیتورینگ در تیم‌های کوچک؛ تجربه‌ی سرپرستی تیم فنی</h1>
+      <p class="lede">در تیم‌های کوچک معمولاً استقرار نسخه‌ی جدید یعنی یک نفر، یک عصر پنجشنبه، کپی دستی فایل‌ها روی سرور و دعا. این مقاله تجربه‌ی تغییر این وضعیت در دوره‌ی سرپرستی تیم فنی است.</p>
+      <div class="art-meta mono">
+        <span>تاریخ <b>۲۴ آبان ۱۴۰۵</b></span>
+        <span>زمان مطالعه <b>۳ دقیقه</b></span>
+        <span>موضوع <b>نرم‌افزار سازمانی</b></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="art-body">
+    <div class="wrap">
+      <aside class="toc" aria-label="فهرست مطالب">
+        <h2>CONTENTS</h2>
+        <ol id="toc"></ol>
+      </aside>
+
+      <div class="prose">
+<h2 id="before">نقطه‌ی شروع</h2>
+<p>تیم چند پروژه‌ی فعال داشت که هر کدام روی سرور مشتری اجرا می‌شد. مشکلات تکراری بودند:</p>
+<ul>
+ <li>استقرار دستی که هر بار کمی متفاوت انجام می‌شد</li>
+ <li>«روی سیستم من کار می‌کرد»؛ تفاوت محیط توسعه و سرور</li>
+ <li>باگ‌هایی که اول مشتری می‌دید، نه تیم</li>
+ <li>وابستگی به یک یا دو نفر که «می‌دانستند چطور باید منتشر کرد»</li>
+</ul>
+
+<h2 id="ci">گام اول: یکپارچه‌سازی مداوم (CI)</h2>
+<p>هر تغییری که در مخزن کد ثبت می‌شد، به‌صورت خودکار build و تست می‌شد. اگر build شکست می‌خورد، کد اجازه‌ی ادغام در شاخه‌ی اصلی را نداشت. همین قانون ساده دو اثر بزرگ داشت: کد شکسته دیگر به نسخه‌ی اصلی نمی‌رسید و همه‌ی اعضای تیم مجبور شدند پروژه را قابل build در هر محیطی نگه دارند.</p>
+
+<h2 id="review">گام دوم: کد ریویو به‌عنوان فرهنگ، نه بازرسی</h2>
+<p>هر تغییر قبل از ادغام حداقل توسط یک نفر دیگر بررسی می‌شد. نکته‌ی مهم لحن ریویو بود: هدف یادگیری و یکدستی کد است، نه پیدا کردن مقصر. یک چک‌لیست کوتاه کمک کرد ریویوها متمرکز بمانند:</p>
+<ol>
+ <li>آیا تغییر همان کاری را می‌کند که قرار بوده؟</li>
+ <li>آیا حالت‌های خطا و ورودی نامعتبر در نظر گرفته شده‌اند؟</li>
+ <li>آیا مسئله‌ی امنیتی یا کارایی واضحی وجود دارد؟</li>
+ <li>آیا نفر بعدی می‌تواند این کد را بفهمد؟</li>
+</ol>
+<p>کد ریویو بهترین ابزار منتورینگ اعضای جدیدتر تیم هم بود.</p>
+
+<h2 id="cd">گام سوم: استقرار خودکار (CD)</h2>
+<p>استقرار به یک خط لوله‌ی تکرارپذیر تبدیل شد: build، تست، بسته‌بندی، انتشار روی محیط آزمایشی، و بعد از تأیید، انتشار روی محیط اصلی. چون هر بار دقیقاً همان مراحل اجرا می‌شد، استقرار از یک رویداد پراسترس به یک کار روزمره تبدیل شد و نسخه‌ها کوچک‌تر و پرتکرارتر شدند؛ که خودش ریسک هر انتشار را کم کرد.</p>
+<div class="note"><b class="mono">NOTE</b>همیشه یک راه برگشت سریع داشته باشید. نگهداری نسخه‌ی قبلی و امکان بازگشت با یک دستور، از هر تست دیگری ارزشمندتر است.</div>
+
+<h2 id="monitoring">گام چهارم: مانیتورینگ و لاگ</h2>
+<p>هدف این بود که تیم قبل از مشتری از مشکل باخبر شود:</p>
+<ul>
+ <li><strong>لاگ متمرکز و ساختاریافته:</strong> همه‌ی خطاها با جزئیات درخواست در یک جا قابل جست‌وجو</li>
+ <li><strong>هشدار:</strong> افزایش ناگهانی خطا یا کندی، به تیم اطلاع داده می‌شد.</li>
+ <li><strong>پایش سلامت:</strong> بررسی خودکار در دسترس بودن سرویس‌ها و دیتابیس</li>
+ <li><strong>شاخص‌های کارایی:</strong> زمان پاسخ درخواست‌ها و کوئری‌های کند</li>
+</ul>
+
+<h2 id="people">بخش انسانی</h2>
+<p>ابزارها نیمی از ماجرا بودند. هماهنگی با تیم‌های محصول و تست برای برنامه‌ریزی اسپرینت‌ها، مصاحبه‌ی فنی و آنبوردینگ اعضای جدید با مستندات روشن، و تعریف استانداردهای مشترک امنیت و کیفیت کد، همان چیزهایی بودند که باعث شدند تغییرات ماندگار شوند.</p>
+
+<h2 id="result">نتیجه</h2>
+<p>استقرارها پرتکرارتر و کم‌استرس‌تر شدند، باگ‌ها زودتر و معمولاً قبل از مشتری پیدا شدند و وابستگی به افراد خاص کم شد. اگر تیم شما هم در همین نقطه‌ی شروع است، لازم نیست همه را یک‌باره پیاده کنید؛ از CI شروع کنید. این همان رویکرد قدم‌به‌قدمی است که در <a href="/blog/operations-automation-roadmap/">خودکارسازی عملیات سازمان</a> هم توصیه کرده‌ام. برای مشاوره، از <a href="/#contact">بخش تماس</a> پیام بدهید.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<section class="sec related">
+  <div class="wrap">
+    <div class="sec-head"><span class="idx mono">→</span><h2>نوشته‌های مرتبط</h2></div>
+      <a class="post" href="/blog/production-management-software/"><span class="d">نرم‌افزار سازمانی</span><h3>نرم‌افزار مدیریت تولید؛ از برنامه‌ریزی تا کنترل کارگاه</h3><span class="go">←</span></a>
+      <a class="post" href="/blog/accounting-inventory-software/"><span class="d">نرم‌افزار سازمانی</span><h3>نرم‌افزار حسابداری و انبار اختصاصی؛ کی لازم است و چطور ساخته می‌شود</h3><span class="go">←</span></a>
+      <a class="post" href="/blog/school-exam-analysis-software/"><span class="d">نرم‌افزار سازمانی</span><h3>نرم‌افزار تحلیل آزمون‌های جامع مدارس؛ از کارنامه تا تصمیم آموزشی</h3><span class="go">←</span></a>
+  </div>
+</section>
+
+<nav class="art-foot" aria-label="ناوبری مقاله">
+  <div class="wrap">
+    <a href="/blog/guard-management-software/"><small>NEXT</small><b>سامانه‌ی مدیریت نگهبانی و حراست؛ تجربه‌ی ساخت یک نرم‌افزار واقعی</b></a>
+    <a href="/blog/llm-ticket-support/"><small>PREVIOUS</small><b>LLM اختصاصی برای پاسخ به تیکت‌ها؛ از ایده تا استقرار</b></a>
+  </div>
+</nav>
+</main>
+
+<footer>
+  <div class="wrap mono ltr"><span>© <span id="yr">2026</span> NIMA TALEBI</span><a href="/blog/">← BLOG</a></div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

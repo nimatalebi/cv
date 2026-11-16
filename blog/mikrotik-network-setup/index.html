@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>راه‌اندازی شبکه‌ی شرکت با میکروتیک؛ از طراحی تا امنیت — نیما طالبی</title>
+<meta name="description" content="راهنمای عملی راه‌اندازی شبکه‌ی شرکت با روتر میکروتیک: طراحی و تفکیک شبکه با VLAN، اینترنت چندخطه، VPN برای دورکاری، فایروال و نکات امنیتی ضروری.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://nimatalebi.ir/blog/mikrotik-network-setup/">
+<meta name="theme-color" content="#0c0c0b">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:url" content="https://nimatalebi.ir/blog/mikrotik-network-setup/">
+<meta property="og:title" content="راه‌اندازی شبکه‌ی شرکت با میکروتیک؛ از طراحی تا امنیت">
+<meta property="og:description" content="راهنمای عملی راه‌اندازی شبکه‌ی شرکت با روتر میکروتیک: طراحی و تفکیک شبکه با VLAN، اینترنت چندخطه، VPN برای دورکاری، فایروال و نکات امنیتی ضروری.">
+<meta property="og:image" content="https://nimatalebi.ir/assets/img/avatar.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="article:published_time" content="2026-11-15">
+<link rel="icon" href="/assets/img/favicon.ico">
+<link rel="preload" href="/assets/fonts/vazirmatn-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "راه‌اندازی شبکه‌ی شرکت با میکروتیک؛ از طراحی تا امنیت",
+ "description": "راهنمای عملی راه‌اندازی شبکه‌ی شرکت با روتر میکروتیک: طراحی و تفکیک شبکه با VLAN، اینترنت چندخطه، VPN برای دورکاری، فایروال و نکات امنیتی ضروری.",
+ "datePublished": "2026-11-15",
+ "dateModified": "2026-11-15",
+ "inLanguage": "fa",
+ "mainEntityOfPage": "https://nimatalebi.ir/blog/mikrotik-network-setup/",
+ "image": "https://nimatalebi.ir/assets/img/avatar.png",
+ "keywords": "راه اندازی شبکه میکروتیک",
+ "author": {
+  "@type": "Person",
+  "name": "نیما طالبی",
+  "url": "https://nimatalebi.ir/"
+ }
+}
+</script>
+</head>
+<body>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="/"><i aria-hidden="true"></i>نیما طالبی</a>
+    <nav class="nav" aria-label="ناوبری اصلی">
+      <a href="/#about">درباره من</a>
+      <a href="/#work">تخصص‌ها</a>
+      <a href="/#experience">تجربه</a>
+      <a href="/blog/" class="cur">نوشته‌ها</a>
+      <a href="/#contact">تماس</a>
+    </nav>
+    <div class="clock mono ltr"><span class="dot" aria-hidden="true"></span><span>TEHRAN</span><b id="clock">--:--</b></div>
+  </div>
+</header>
+
+<main>
+<article>
+  <header class="art-head">
+    <div class="wrap">
+      <nav class="crumbs mono" aria-label="مسیر"><a href="/">خانه</a><span aria-hidden="true">/</span><a href="/blog/">نوشته‌ها</a><span aria-hidden="true">/</span><span>mikrotik-network-setup</span></nav>
+      <h1>راه‌اندازی شبکه‌ی شرکت با میکروتیک؛ از طراحی تا امنیت</h1>
+      <p class="lede">شبکه‌ی خیلی از شرکت‌های کوچک و متوسط این‌طور شکل گرفته: یک مودم، چند سوییچ و هر دستگاه جدیدی که لازم شد، به هر جا که پورت خالی داشت وصل شد. روترهای میکروتیک با هزینه‌ی معقول، امکان ساخت یک شبکه‌ی مرتب، امن و قابل مدیریت را می‌دهند.</p>
+      <div class="art-meta mono">
+        <span>تاریخ <b>۲۴ آبان ۱۴۰۵</b></span>
+        <span>زمان مطالعه <b>۳ دقیقه</b></span>
+        <span>موضوع <b>شبکه و زیرساخت</b></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="art-body">
+    <div class="wrap">
+      <aside class="toc" aria-label="فهرست مطالب">
+        <h2>CONTENTS</h2>
+        <ol id="toc"></ol>
+      </aside>
+
+      <div class="prose">
+<h2 id="why">چرا میکروتیک؟</h2>
+<p>میکروتیک در بازه‌ی قیمتی خودش امکاناتی دارد که معمولاً در تجهیزات گران‌تر دیده می‌شود: مسیریابی پیشرفته، فایروال کامل، VPN، مدیریت پهنای باند، پشتیبانی از چند خط اینترنت و مانیتورینگ. نقطه‌ی ضعفش هم همین گستردگی است؛ تنظیمات پیش‌فرض برای محیط سازمانی کافی نیست و پیکربندی نادرست می‌تواند شبکه را ناامن کند.</p>
+
+<h2 id="design">گام اول: طراحی، قبل از پیکربندی</h2>
+<p>قبل از دست زدن به روتر، این‌ها را روی کاغذ مشخص کنید:</p>
+<ul>
+ <li>چه گروه‌هایی از دستگاه‌ها داریم؟ کارمندان، سرورها، دوربین‌ها، مهمان‌ها، تلفن‌های VoIP</li>
+ <li>کدام گروه باید به کدام گروه دسترسی داشته باشد؟</li>
+ <li>چند خط اینترنت داریم و هر کدام برای چه استفاده شود؟</li>
+ <li>چه کسانی از بیرون به شبکه وصل می‌شوند؟</li>
+</ul>
+
+<h2 id="vlan">گام دوم: تفکیک شبکه با VLAN</h2>
+<p>مهم‌ترین تصمیم امنیتی، جدا کردن بخش‌های شبکه از هم است. با VLAN، دستگاه‌هایی که روی یک سوییچ فیزیکی‌اند در شبکه‌های منطقی جدا قرار می‌گیرند. مثلاً:</p>
+<ul>
+ <li><strong>شبکه‌ی کارمندان:</strong> دسترسی به اینترنت و سرورهای داخلی مجاز</li>
+ <li><strong>شبکه‌ی سرورها:</strong> فقط پورت‌های لازم از سمت کارمندان باز</li>
+ <li><strong>شبکه‌ی دوربین‌ها:</strong> بدون دسترسی به اینترنت؛ فقط به دستگاه ضبط</li>
+ <li><strong>شبکه‌ی مهمان:</strong> فقط اینترنت، با محدودیت سرعت و بدون دید به شبکه‌ی داخلی</li>
+</ul>
+<p>اگر یکی از دستگاه‌ها آلوده شود، آسیب در همان بخش می‌ماند و به کل شبکه نمی‌رسد.</p>
+
+<h2 id="wan">گام سوم: اینترنت چندخطه و پایداری</h2>
+<p>با دو خط اینترنت از دو سرویس‌دهنده، میکروتیک می‌تواند در صورت قطعی یک خط، خودکار به خط دیگر سوییچ کند (Failover) یا ترافیک را بین دو خط تقسیم کند (Load Balancing). برای کسب‌وکاری که فروش آنلاین یا سرویس ابری دارد، این ساده‌ترین راه افزایش پایداری است.</p>
+
+<h2 id="vpn">گام چهارم: VPN برای دورکاری و شعب</h2>
+<p>کارمندان دورکار یا شعب دیگر باید از طریق VPN رمزنگاری‌شده به شبکه وصل شوند، نه با باز کردن پورت سرورها روی اینترنت. میکروتیک از پروتکل‌های امن مدرن پشتیبانی می‌کند و می‌شود برای هر کاربر دسترسی جداگانه تعریف کرد.</p>
+
+<h2 id="security">گام پنجم: امنیت خود روتر</h2>
+<ol>
+ <li>تغییر نام کاربری پیش‌فرض و استفاده از رمز قوی</li>
+ <li>غیرفعال کردن سرویس‌های مدیریتی بی‌استفاده و محدود کردن دسترسی مدیریت به شبکه‌ی داخلی</li>
+ <li>به‌روزرسانی منظم سیستم‌عامل روتر</li>
+ <li>قوانین فایروال با رویکرد «همه‌چیز بسته، مگر آنچه لازم است»</li>
+ <li>محافظت در برابر حملات حدس رمز و اسکن پورت</li>
+ <li>پشتیبان‌گیری منظم از پیکربندی</li>
+</ol>
+
+<h2 id="monitor">گام ششم: مانیتورینگ و مستندسازی</h2>
+<p>شبکه‌ای که مستند نشده باشد، با رفتن یک نفر غیرقابل‌مدیریت می‌شود. نقشه‌ی شبکه، فهرست IPها و VLANها و دلیل هر قانون فایروال را مستند کنید. پایش مصرف پهنای باند و هشدار قطعی هم کمک می‌کند مشکلات قبل از اینکه کاربران گزارش بدهند، دیده شوند.</p>
+
+<h2 id="next">قدم بعدی</h2>
+<p>شبکه‌ی مرتب، زیربنای همه‌ی سرویس‌های دیگر است؛ از سرورهای مجازی (<a href="/blog/esxi-server-virtualization/">مجازی‌سازی با ESXi</a>) تا <a href="/blog/enterprise-ai-solutions/">راهکارهای هوش مصنوعی داخل سازمان</a>. اگر می‌خواهید شبکه‌ی شرکت‌تان را بازطراحی کنید، از <a href="/#contact">بخش تماس</a> پیام بدهید.</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<section class="sec related">
+  <div class="wrap">
+    <div class="sec-head"><span class="idx mono">→</span><h2>نوشته‌های مرتبط</h2></div>
+      <a class="post" href="/blog/esxi-server-virtualization/"><span class="d">شبکه و زیرساخت</span><h3>مجازی‌سازی سرور با VMware ESXi؛ کاهش هزینه‌ی سخت‌افزار در سازمان‌های کوچک</h3><span class="go">←</span></a>
+      <a class="post" href="/blog/smart-business/"><span class="d">اتوماسیون</span><h3>هوشمندسازی کسب‌وکار چیست و از کجا شروع کنیم؟ راهنمای عملی برای مدیران</h3><span class="go">←</span></a>
+      <a class="post" href="/blog/enterprise-ai-solutions/"><span class="d">هوش مصنوعی</span><h3>راهکارهای هوش مصنوعی برای سازمان‌ها؛ کجا جواب می‌دهد و کجا نه</h3><span class="go">←</span></a>
+  </div>
+</section>
+
+<nav class="art-foot" aria-label="ناوبری مقاله">
+  <div class="wrap">
+    <a href="/blog/technical-seo/"><small>NEXT</small><b>سئوی فنی (Technical SEO) چیست و چرا بدون آن محتوا دیده نمی‌شود</b></a>
+    <a href="/blog/seo-in-ai-era/"><small>PREVIOUS</small><b>سئو در عصر هوش مصنوعی؛ چطور در پاسخ‌های ChatGPT و گوگل دیده شویم</b></a>
+  </div>
+</nav>
+</main>
+
+<footer>
+  <div class="wrap mono ltr"><span>© <span id="yr">2026</span> NIMA TALEBI</span><a href="/blog/">← BLOG</a></div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>
